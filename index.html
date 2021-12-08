@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vanilla JS Carousel</title>
+    <link rel="stylesheet" href="./style/style.css" />
+  </head>
+  <body>
+    <div class="carousel">
+      <button class="carousel__button carousel__button--left is-hidden">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+      <div class="carousel__track-container">
+        <ul class="carousel__track">
+          <li class="carousel__slide current-slide">
+            <div class="carousel__entry">
+              <p class="carousell__entry-text">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Nesciunt itaque consequuntur harum consequatur laboriosam dolore
+                optio nihil fugit possimus provident! Ipsa adipisci officiis
+                quisquam dolorem labore inventore voluptates! Sed, corrupti!
+              </p>
+              <p class="carousell__entry-name">Lorem, ipsum.</p>
+              <p class="carousel__entry-position">Lorem, ipsum dolor.</p>
+            </div>
+          </li>
+          <li class="carousel__slide">
+            <div class="carousel__entry">
+              <p class="carousell__entry-text">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Nesciunt itaque consequuntur harum consequatur laboriosam dolore
+                optio nihil fugit possimus provident! Ipsa adipisci officiis
+                quisquam dolorem labore inventore voluptates! Sed, corrupti!
+              </p>
+              <p class="carousell__entry-name">Lorem, ipsum dolor.</p>
+              <p class="carousel__entry-position">Lorem, ipsum.</p>
+            </div>
+          </li>
+          <li class="carousel__slide">
+            <div class="carousel__entry">
+              <p class="carousell__entry-text">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Nesciunt itaque consequuntur harum consequatur laboriosam dolore
+                optio nihil fugit possimus provident! Ipsa adipisci officiis
+                quisquam dolorem labore inventore voluptates! Sed, corrupti!
+              </p>
+              <p class="carousell__entry-name">Lorem.</p>
+              <p class="carousel__entry-position">Lorem ipsum dolor sit.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <button class="carousel__button carousel__button--right">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+
+      <div class="carousel__nav">
+        <button class="carousel__indicator current-slide"></button>
+        <button class="carousel__indicator"></button>
+        <button class="carousel__indicator"></button>
+      </div>
+    </div>
+
+    <script src="./js/carousel.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>
