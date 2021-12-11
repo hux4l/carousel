@@ -23,9 +23,11 @@ track.append(firstClone);
 track.prepend(lastClone);
 
 /// create button for navigation dot
-const navDot = function () {
+const navDot = function (id) {
   let btn = document.createElement("button");
   btn.classList.add("carousel__indicator");
+  btn.id = "dot";
+  btn.dataset.id = +id;
   return btn;
 };
 
@@ -99,7 +101,20 @@ const nextSlide = () => {
 const prevSlide = () => {
   slides = getSlides();
   if (index <= 0) return;
+  if (index > 0 && index < slides.length - 1)
+    navDots[index - 1].classList.remove("current-slide");
+  else {
+    navDots[index].classList.add("current-slide");
+  }
+  console.log(index);
   index--;
+  console.log(index);
+  if (index > 0 && index < slides.length - 2) {
+    navDots[index - 1].classList.add("current-slide");
+  } else {
+    navDots[slides.length - 3].classList.add("current-slide");
+  }
+
   track.style.transform = `translateX(${-slideWidth * index}px)`;
   track.style.transition = "0.7s";
 };
@@ -116,7 +131,7 @@ btnPrev.addEventListener("mouseleave", startSlide);
 
 function createNavDots() {
   for (let i = 1; i < getSlides().length - 2; i++) {
-    navDots.push(navDot());
+    navDots.push(navDot(i));
   }
   for (let dot of navDots) {
     dotsNav.append(dot);
@@ -125,67 +140,23 @@ function createNavDots() {
 
 startSlide();
 
-/*
-// arrange slides nex to each
-const setSlidePosition = (slide, index) => {
-  slide.style.left = slideWidth * index + "px";
-};
-slides.forEach(setSlidePosition);
+// change slide on dot click
+dotsNav.addEventListener("click", function (e) {
+  clearInterval(slideId);
+  // if clicked something else do nothing
+  if (e.target.id !== "dot") return;
 
-// function to move style
-const moveToSlide = (track, currentSlide, targetSlide) => {
-  track.style.transform = "translateX(-" + targetSlide.style.left + ")";
-  currentSlide.classList.remove("current-slide");
-  targetSlide.classList.add("current-slide");
-};
-
-// dots change
-const updateDots = (currentDot, targetDot) => {
-  currentDot.classList.remove("current-slide");
-  targetDot.classList.add("current-slide");
-};
-
-// move slides left
-btnPrev.addEventListener("click", (e) => {
-  // check current slide
-  const currentSlide = track.querySelector(".current-slide");
-  //check next slide
-  const prevSlide = currentSlide.previousElementSibling;
-  const currentDot = dotsNav.querySelector(".current-slide");
-  const prevDot = currentDot.previousElementSibling;
-  const prevIndex = slides.findIndex((slide) => slide === prevSlide);
-
-  moveToSlide(track, currentSlide, prevSlide);
-  updateDots(currentDot, prevDot);
-  hideShowArrows(slides, btnPrev, btnNext, prevIndex);
+  // get dot id from data attribute
+  const dotId = +e.target.dataset.id;
+  // change without transition
+  track.style.transition = "0.7s";
+  // set all dots as not active
+  for (let dot of navDots) dot.classList.remove("current-slide");
+  // change index to current selected slide
+  index = dotId + 1;
+  // select clicked dot as current-slide
+  navDots[dotId].classList.add("current-slide");
+  // start transform from selected slide
+  track.style.transform = `translateX(${-slideWidth * index}px)`;
+  startSlide();
 });
-
-// move slides right
-btnNext.addEventListener("click", (e) => {
-  // check current slide
-  const currentSlide = track.querySelector(".current-slide");
-  //check next slide
-  const nextSlide = currentSlide.nextElementSibling;
-  const currentDot = dotsNav.querySelector(".current-slide");
-  const nextDot = currentDot.nextElementSibling;
-  const nextIndex = slides.findIndex((slide) => slide === nextSlide);
-  moveToSlide(track, currentSlide, nextSlide);
-  updateDots(currentDot, nextDot);
-  hideShowArrows(slides, btnPrev, btnNext, nextIndex);
-});
-
-// on nav move to selected slide
-dotsNav.addEventListener("click", (e) => {
-  // select only clicked dot
-  const targetDot = e.target.closest("button");
-  if (!targetDot) return;
-
-  const currentSlide = track.querySelector(".current-slide");
-  const currentDot = dotsNav.querySelector(".current-slide");
-  const targetIndex = dots.findIndex((dot) => dot === targetDot);
-  const targetSlide = slides[targetIndex];
-
-  moveToSlide(track, currentSlide, targetSlide);
-  updateDots(currentDot, targetDot);
-});
- */
