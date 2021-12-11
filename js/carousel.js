@@ -81,11 +81,12 @@ track.addEventListener("mouseleave", startSlide);
 // otherwise translate slides
 const nextSlide = () => {
   slides = getSlides();
-  if (index >= slides.length - 1) return;
+  console.log(index);
+  if (index === 1) navDots[index - 1].classList.add("current-slide");
   if (index > 0 && index < slides.length - 2)
     navDots[index - 1].classList.remove("current-slide");
   else {
-    navDots[index - 3].classList.add("current-slide");
+    navDots[index - 3].classList.remove("current-slide");
   }
   index++;
   if (index > 0 && index < slides.length - 1) {
@@ -93,6 +94,8 @@ const nextSlide = () => {
   } else {
     navDots[index - 2].classList.remove("current-slide");
   }
+  if (index === slides.length - 1) navDots[0].classList.add("current-slide");
+
   track.style.transform = `translateX(${-slideWidth * index}px)`;
   track.style.transition = "0.7s";
 };
