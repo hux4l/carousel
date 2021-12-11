@@ -1,12 +1,119 @@
 const track = document.querySelector(".carousel__track");
-const slides = Array.from(track.children);
+let slides = document.querySelectorAll(".carousel__slide");
+const slide = document.querySelector(".carousel__slide");
 const btnNext = document.querySelector(".carousel__button--right");
 const btnPrev = document.querySelector(".carousel__button--left");
 const dotsNav = document.querySelector(".carousel__nav");
-const dots = Array.from(dotsNav.children);
+const interval = 3000;
 
-const slideWidth = slides[0].getBoundingClientRect().width;
+// set current index
+let index = 1;
+let slideId;
 
+// clone first and last slide
+const firstClone = slides[0].cloneNode(true);
+const lastClone = slides[slides.length - 1].cloneNode(true);
+
+// add id to first and last slide
+firstClone.id = "first-clone";
+lastClone.id = "last-clone";
+
+// add last to beginning, first to end
+track.append(firstClone);
+track.prepend(lastClone);
+
+// get width of slide
+const slideWidth = slides[index].clientWidth;
+
+// move slides one left, so the first one is hidden
+track.style.transform = `translateX(${-slideWidth * index}px)`;
+
+// timer to start slide
+const startSlide = () => {
+  slideId = setInterval(() => {
+    nextSlide();
+  }, interval);
+};
+
+const getSlides = () => document.querySelectorAll(".carousel__slide");
+
+// on ond of the transition go to beginning
+track.addEventListener("transitionend", () => {
+  slides = getSlides();
+  // if we are on end, switch to beginning
+  if (slides[index].id === firstClone.id) {
+    track.style.transition = "none";
+    index = 1;
+    track.style.transform = `translateX(${-slideWidth * index}px)`;
+  }
+  // if we are on beginning switch to end
+  if (slides[index].id === lastClone.id) {
+    track.style.transition = "none";
+    index = slides.length - 2;
+    track.style.transform = `translateX(${-slideWidth * index}px)`;
+  }
+});
+
+// if we get mouse in the container stops the timer
+track.addEventListener("mouseenter", () => {
+  clearInterval(slideId);
+});
+
+// if we leave container starts timer again
+track.addEventListener("mouseleave", startSlide);
+
+// next slide, if we are on end do nothing
+// otherwise translate slides
+const nextSlide = () => {
+  slides = getSlides();
+  if (index >= slides.length - 1) return;
+  index++;
+  track.style.transform = `translateX(${-slideWidth * index}px)`;
+  track.style.transition = "0.7s";
+};
+
+// previous slide, if we are on beginning do nothing
+const prevSlide = () => {
+  slides = getSlides();
+  if (index <= 0) return;
+  index--;
+  track.style.transform = `translateX(${-slideWidth * index}px)`;
+  track.style.transition = "0.7s";
+};
+
+// listeners to next and prev buttons
+btnNext.addEventListener("click", nextSlide);
+btnPrev.addEventListener("click", prevSlide);
+
+// stop and restart timer each time we click buttons
+btnNext.addEventListener("mouseover", () => clearInterval(slideId));
+btnPrev.addEventListener("mouseover", () => clearInterval(slideId));
+btnNext.addEventListener("mouseleave", startSlide);
+btnPrev.addEventListener("mouseleave", startSlide);
+
+const navDot = function () {
+  let btn = document.createElement("button");
+  btn.classList.add("carousel__indicator");
+  return btn;
+};
+
+let navDots = [];
+
+function createNavDots() {
+  for (let i = 1; i < getSlides().length - 2; i++) {
+    navDots.push(navDot());
+  }
+  for (let dot of navDots) {
+    dotsNav.append(dot);
+  }
+}
+
+createNavDots();
+console.log(navDots);
+
+startSlide();
+
+/*
 // arrange slides nex to each
 const setSlidePosition = (slide, index) => {
   slide.style.left = slideWidth * index + "px";
@@ -24,21 +131,6 @@ const moveToSlide = (track, currentSlide, targetSlide) => {
 const updateDots = (currentDot, targetDot) => {
   currentDot.classList.remove("current-slide");
   targetDot.classList.add("current-slide");
-};
-
-// arrows hidding
-const hideShowArrows = (slides, btnPrev, btnNext, target) => {
-  // arrows dissapearing
-  if (target === 0) {
-    btnPrev.classList.add("is-hidden");
-    btnNext.classList.remove("is-hidden");
-  } else if (target === slides.length - 1) {
-    btnPrev.classList.remove("is-hidden");
-    btnNext.classList.add("is-hidden");
-  } else {
-    btnPrev.classList.remove("is-hidden");
-    btnNext.classList.remove("is-hidden");
-  }
 };
 
 // move slides left
@@ -83,6 +175,5 @@ dotsNav.addEventListener("click", (e) => {
 
   moveToSlide(track, currentSlide, targetSlide);
   updateDots(currentDot, targetDot);
-
-  hideShowArrows(slides, btnPrev, btnNext, targetIndex);
 });
+ */
