@@ -22,6 +22,13 @@ lastClone.id = "last-clone";
 track.append(firstClone);
 track.prepend(lastClone);
 
+/// create button for navigation dot
+const navDot = function () {
+  let btn = document.createElement("button");
+  btn.classList.add("carousel__indicator");
+  return btn;
+};
+
 // get width of slide
 const slideWidth = slides[index].clientWidth;
 
@@ -35,7 +42,13 @@ const startSlide = () => {
   }, interval);
 };
 
+// function to get nev slides array
 const getSlides = () => document.querySelectorAll(".carousel__slide");
+
+// navigation dots
+let navDots = [];
+createNavDots();
+navDots = document.querySelectorAll(".carousel__indicator");
 
 // on ond of the transition go to beginning
 track.addEventListener("transitionend", () => {
@@ -67,7 +80,17 @@ track.addEventListener("mouseleave", startSlide);
 const nextSlide = () => {
   slides = getSlides();
   if (index >= slides.length - 1) return;
+  if (index > 0 && index < slides.length - 2)
+    navDots[index - 1].classList.remove("current-slide");
+  else {
+    navDots[index - 3].classList.add("current-slide");
+  }
   index++;
+  if (index > 0 && index < slides.length - 1) {
+    navDots[index - 1].classList.add("current-slide");
+  } else {
+    navDots[index - 2].classList.remove("current-slide");
+  }
   track.style.transform = `translateX(${-slideWidth * index}px)`;
   track.style.transition = "0.7s";
 };
@@ -91,14 +114,6 @@ btnPrev.addEventListener("mouseover", () => clearInterval(slideId));
 btnNext.addEventListener("mouseleave", startSlide);
 btnPrev.addEventListener("mouseleave", startSlide);
 
-const navDot = function () {
-  let btn = document.createElement("button");
-  btn.classList.add("carousel__indicator");
-  return btn;
-};
-
-let navDots = [];
-
 function createNavDots() {
   for (let i = 1; i < getSlides().length - 2; i++) {
     navDots.push(navDot());
@@ -107,9 +122,6 @@ function createNavDots() {
     dotsNav.append(dot);
   }
 }
-
-createNavDots();
-console.log(navDots);
 
 startSlide();
 
