@@ -1,3 +1,3 @@
 #Simple carousel
 
-for now works only with 3+ slides
+works with 1 slide and more
